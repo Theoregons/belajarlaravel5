@@ -56,7 +56,9 @@ class SiswaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // dd('ini fungsi edit');
+        $data = Siswa::find($id);
+        return view('edit', compact('data'));
     }
 
     /**
@@ -64,7 +66,14 @@ class SiswaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = $request->validate([
+            'nis' => 'required|integer',
+            'nama' => 'required',
+            'alamat' => 'required|string',
+        ]);
+        // dd($request);
+        Siswa::find($id)->update($validator);
+        return redirect('siswa')->with('success', 'Data Berhasil Di Update');
     }
 
     /**
@@ -72,7 +81,9 @@ class SiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // dd('ini fungsi destroy');
+        Siswa::find($id)->delete();
+        return redirect('siswa')->with('success', 'Data Berhasil Dihapus');
     }
 
 }
