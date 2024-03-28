@@ -19,7 +19,13 @@
             <input type="text" class="form-control @error('alamat') is-invalid @enderror" name="alamat"
                 value="{{ $data->alamat }}" aria-describedby="emailHelp">
         </div>
+        <select class="form-select form-select-sm" aria-label="Small select example" name="sekolah_id">
+            @foreach ($sekolah as $item)
+                <option value="{{ $item->id }}" @selected($data->sekolah_id == $item->id)>{{ $item->nama_sekolah }}</option>
+            @endforeach
+        </select>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
     </form>
 @endsection
