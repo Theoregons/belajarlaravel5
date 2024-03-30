@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Sekolah;
+use App\Http\Controllers\Controller;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class SiswaController extends Controller
 {
@@ -12,22 +14,13 @@ class SiswaController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    { 
-        $data = Siswa::all();
-        // dd($data);
-        // echo 'test';
-        return view('tampil', compact('data'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
     {
-        $sekolah = Sekolah::all();
-        // dd('ini fungsi create');
-        return view('tambah', compact('sekolah'));
-    }
+        
+        return response([
+            'message' => 'Data Berhasil Ditampilkan',
+            'data' => Siswa::all()
+        ],200);
+    } 
 
     /**
      * Store a newly created resource in storage.
@@ -40,8 +33,11 @@ class SiswaController extends Controller
             'alamat' => 'required|string',
             'sekolah_id' => 'required|integer',
         ]);
-        Siswa::create($validator);
-        return redirect('siswa')->with('success', 'Data Berhasil Diinput');
+         
+        return response([
+            'message' => 'Data Berhasil Dibuat',
+            'data' => Siswa::create($validator)
+        ],201);
     }
 
     /**
@@ -49,18 +45,16 @@ class SiswaController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        // dd('ini fungsi edit');
-        $data = Siswa::find($id);
-        $sekolah = Sekolah::all();
-        return view('edit', compact('data', 'sekolah'));
+        try {
+            return response([
+                'message' => 'Data Berhasil Ditampilkan',
+                'data' => Siswa::findOrFail($id)
+            ],200); 
+        } catch (\Throwable $th) {
+            return response([
+                'message' => 'Data Tidak Ditemukan'
+            ],400); 
+        }
     }
 
     /**
@@ -74,9 +68,14 @@ class SiswaController extends Controller
             'alamat' => 'required|string',
             'sekolah_id' => 'required|integer',
         ]);
-        // dd($request);
-        Siswa::find($id)->update($validator);
-        return redirect('siswa')->with('success', 'Data Berhasil Di Update');
+
+        $data = Siswa::find($id);
+        $data->update($validator);
+
+        return response([
+            'message' => 'Data Berhasil Diubah',
+            'data' => $data
+        ],200); 
     }
 
     /**
@@ -84,9 +83,9 @@ class SiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        // dd('ini fungsi destroy');
         Siswa::find($id)->delete();
-        return redirect('siswa')->with('success', 'Data Berhasil Dihapus');
+        return response([
+            'message' => 'Data Berhasil Dihapus'
+        ],200); 
     }
-
 }

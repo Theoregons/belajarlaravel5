@@ -4,13 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-class Sekolah extends Model
+
+class Upload extends Model
 {
     use HasFactory;
-    protected $table = 'sekolah';
+    protected $table = 'upload';
     protected $guarded = ['id'];
 
-    function siswa(){
-        return $this->hasMany(Siswa::class);
-    }
 }
